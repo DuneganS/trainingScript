@@ -1,5 +1,12 @@
---Mission script by Marc "MBot" Marbot - 08Nov2013
-
+-- ###########################################################################################################################
+-- ##                                              																			##
+-- ##  Training Script Version 1.0                 																			##
+-- ##  Author: Travokk                             																			##
+-- ##  Created for use by the TAW DCS NA 33rd TFW  																			##
+-- ##  Based off of Mission script by Marc "MBot" Marbot (https://forums.eagle.ru/showpost.php?p=2229242&postcount=6)		##
+-- ##  You need to load MOOSE (https://github.com/FlightControl-Master/MOOSE) into your mission before calling this script	##
+-- ##                                              																			##
+-- ###########################################################################################################################
 
 do
 
@@ -2547,9 +2554,9 @@ do
 	
 	local function SpawnEnemy()
 		local grp = Group.getByName("Bandit")
-		if grp ~= nil then
-			grp:destroy()
-		end
+	--	if grp ~= nil then
+	--		grp:destroy()
+	--	end
 		
 		local StartBearing = math.random(1, 360)
 		local StartDist = math.random(1, startWP.radius)
@@ -2705,7 +2712,7 @@ do
 			["start_time"] = 0,
 			["frequency"] = 124,
 		}
-		coalition.addGroup(country.id.USA, Group.Category.AIRPLANE, group)
+		coalition.addGroup(country.id.RUSSIA, Group.Category.AIRPLANE, group)
 		trigger.action.outText("Targets spawned", 5)
 	end
 
@@ -2741,67 +2748,92 @@ do
 		trigger.action.outText("Target Properties\nType: " .. Target.type .. "\nNumber: " .. Target.number .. "\nSkill: " .. Target.skill .. "\nAltitude: " .. Target.altitude .. "\nArmament: " .. Target.armament, 10)
 	end
 	
-	local function PopulateRadiomenu()
-		missionCommands.removeItem()
-		missionCommands.addCommand("Spawn Enemy", nil, SpawnEnemy)
-		missionCommands.addCommand("Remove Enemy", nil, RemoveEnemy)
-		
-		missionCommands.addSubMenu("Set Type")
-		
-		missionCommands.addSubMenu("West", {"Set Type"})
-		missionCommands.addCommand("F-4E", {"Set Type", "West"}, SetType, "F-4E")
-		missionCommands.addCommand("F-5E", {"Set Type", "West"}, SetType, "F-5E")
-		missionCommands.addCommand("F-14A", {"Set Type", "West"}, SetType, "F-14A")
-		missionCommands.addCommand("F-15C", {"Set Type", "West"}, SetType, "F-15C")
-		missionCommands.addCommand("F-16C", {"Set Type", "West"}, SetType, "F-16C bl.52d")
-		missionCommands.addCommand("F/A-18C", {"Set Type", "West"}, SetType, "F/A-18C")
-		missionCommands.addCommand("Mirage 2000-5", {"Set Type", "West"}, SetType, "Mirage 2000-5")
-		missionCommands.addCommand("A-10A", {"Set Type", "West"}, SetType, "A-10A")
-		missionCommands.addCommand("Tornado IDS", {"Set Type", "West"}, SetType, "Tornado IDS")
-		missionCommands.addCommand("F-86F", {"Set Type", "West"}, SetType, "F-86F Sabre")
-		
-		missionCommands.addSubMenu("East", {"Set Type"})
-		missionCommands.addCommand("L-39ZA", {"Set Type", "East"}, SetType, "L-39ZA")
-		missionCommands.addCommand("MiG-15Bis", {"Set Type", "East"}, SetType, "MiG-15bis")
-		missionCommands.addCommand("MiG-21Bis", {"Set Type", "East"}, SetType, "MiG-21Bis")
-		missionCommands.addCommand("MiG-23MLD", {"Set Type", "East"}, SetType, "MiG-23MLD")
-		missionCommands.addCommand("MiG-25PD", {"Set Type", "East"}, SetType, "MiG-25PD")
-		missionCommands.addCommand("MiG-29A", {"Set Type", "East"}, SetType, "MiG-29A")
-		missionCommands.addCommand("MiG-29S", {"Set Type", "East"}, SetType, "MiG-29S")
-		missionCommands.addCommand("MiG-31", {"Set Type", "East"}, SetType, "MiG-31")
-		missionCommands.addCommand("Su-25", {"Set Type", "East"}, SetType, "Su-25")
-		missionCommands.addCommand("Su-27", {"Set Type", "East"}, SetType, "Su-27")
-		--missionCommands.addCommand("Su-30", {"Set Type", "East"}, SetType, "Su-30")
-		--missionCommands.addCommand("Su-33", {"Set Type", "East"}, SetType, "Su-33")
-			
-		missionCommands.addSubMenu("Set Number")
-		missionCommands.addCommand("1", {"Set Number"}, SetNumber, 1)
-		missionCommands.addCommand("2", {"Set Number"}, SetNumber, 2)
-		missionCommands.addCommand("3", {"Set Number"}, SetNumber, 3)
-		missionCommands.addCommand("4", {"Set Number"}, SetNumber, 4)
-		missionCommands.addCommand("Random", {"Set Number"}, SetNumber, "Random")
 
-		missionCommands.addSubMenu("Set Skill")
-		missionCommands.addCommand("Average", {"Set Skill"}, SetSkill, "Average")
-		missionCommands.addCommand("Good", {"Set Skill"}, SetSkill, "Good")
-		missionCommands.addCommand("High", {"Set Skill"}, SetSkill, "High")
-		missionCommands.addCommand("Excellent", {"Set Skill"}, SetSkill, "Excellent")
-		missionCommands.addCommand("Random", {"Set Skill"}, SetSkill, "Random")
-		
-		missionCommands.addSubMenu("Set Armament")
-		missionCommands.addCommand("Gun", {"Set Armament"}, SetArmament, "gun")
-		missionCommands.addCommand("Rear-Aspect IR", {"Set Armament"}, SetArmament, "rearIR")
-		missionCommands.addCommand("All-Aspect IR", {"Set Armament"}, SetArmament, "allIR")
-		missionCommands.addCommand("SARH", {"Set Armament"}, SetArmament, "SARH")
-		missionCommands.addCommand("ARH", {"Set Armament"}, SetArmament, "ARH")
-		
-		missionCommands.addSubMenu("Set Altitude")
-		missionCommands.addCommand("1000 m", {"Set Altitude"}, SetAltitude, 1000)
-		missionCommands.addCommand("5000 m", {"Set Altitude"}, SetAltitude, 5000)
-		missionCommands.addCommand("9000 m", {"Set Altitude"}, SetAltitude, 9000)
-		missionCommands.addCommand("Random", {"Set Altitude"}, SetAltitude, "Random")
 
+	local function spawnBTR80 ()
+	  btr80 = SPAWN:New( "BTR80" )
+	  spawn_group_btr90 = btr80:Spawn()
 	end
-	timer.scheduleFunction(PopulateRadiomenu, nil, timer.getTime() + 1)
+
+	local function spawnT90()
+	  t90 = SPAWN:New( "T90" )
+	  spawn_group_t90 = t90:Spawn()
+	end
+
+	local function spawnSA13()
+	  sa13 = SPAWN:New( "SA13" )
+	  spawn_group_sa13 = sa13:Spawn()
+	end
+
+	airMenu = missionCommands.addSubMenu("Manage Air", nil)
+
+		missionCommands.addCommand("Spawn Enemy", airMenu, SpawnEnemy)
+		missionCommands.addCommand("RemoveEnemy", airMenu, RemoveEnemy)
+
+	setType = missionCommands.addSubMenu("Set Type", airMenu)
+
+		typeWest = missionCommands.addSubMenu("West", setType)
+		
+			missionCommands.addCommand("F-4E", typeWest, SetType, "F-4E")
+			missionCommands.addCommand("F-5E", typeWest, SetType, "F-5E")
+			missionCommands.addCommand("F-14A", typeWest, SetType, "F-14A")
+			missionCommands.addCommand("F-15C", typeWest, SetType, "F-15C")
+			missionCommands.addCommand("F-16C", typeWest, SetType, "F-16C bl.52d")
+			missionCommands.addCommand("F/A-18C", typeWest, SetType, "F/A-18C")
+			missionCommands.addCommand("Mirage 2000-5", typeWest, SetType, "Mirage 2000-5")
+			missionCommands.addCommand("A-10A", typeWest, SetType, "A-10A")
+			missionCommands.addCommand("Tornado IDS", typeWest, SetType, "Tornado IDS")
+			missionCommands.addCommand("F-86F", typeWest, SetType, "F-86F Sabre")
+
+		typeEast = missionCommands.addSubMenu("East", setType)
+
+			missionCommands.addCommand("L-39ZA", typeEast, SetType, "L-39ZA")
+			missionCommands.addCommand("MiG-15Bis", typeEast, SetType, "MiG-15bis")
+			missionCommands.addCommand("MiG-21Bis", typeEast, SetType, "MiG-21Bis")
+			missionCommands.addCommand("MiG-23MLD", typeEast, SetType, "MiG-23MLD")
+			missionCommands.addCommand("MiG-25PD", typeEast, SetType, "MiG-25PD")
+			missionCommands.addCommand("MiG-29A", typeEast, SetType, "MiG-29A")
+			missionCommands.addCommand("MiG-29S", typeEast, SetType, "MiG-29S")
+			missionCommands.addCommand("MiG-31", typeEast, SetType, "MiG-31")
+			missionCommands.addCommand("Su-25", typeEast, SetType, "Su-25")
+			missionCommands.addCommand("Su-27", typeEast, SetType, "Su-27")
+
+	setNumber = missionCommands.addSubMenu("Set Number", airMenu)
+
+			missionCommands.addCommand("1", setNumber, SetNumber, 1)
+			missionCommands.addCommand("2", setNumber, SetNumber, 2)
+			missionCommands.addCommand("3", setNumber, SetNumber, 3)
+			missionCommands.addCommand("4", setNumber, SetNumber, 4)
+			missionCommands.addCommand("Random", setNumber, SetNumber, "Random")
+
+	setSkill = missionCommands.addSubMenu("Set Skill", airMenu)
+
+			missionCommands.addCommand("Average", setSkill, SetSkill, "Average")
+			missionCommands.addCommand("Good", setSkill, SetSkill, "Good")
+			missionCommands.addCommand("High", setSkill, SetSkill, "High")
+			missionCommands.addCommand("Excellent", setSkill, SetSkill, "Excellent")
+			missionCommands.addCommand("Random", setSkill, SetSkill, "Random")
+
+	setArmament = missionCommands.addSubMenu("Set Armament", airMenu)
+
+
+			missionCommands.addCommand("Gun", setArmament, SetArmament, "gun")
+			missionCommands.addCommand("Rear-Aspect IR", setArmament, SetArmament, "rearIR")
+			missionCommands.addCommand("All-Aspect IR", setArmament, SetArmament, "allIR")
+			missionCommands.addCommand("SARH", setArmament, SetArmament, "SARH")
+			missionCommands.addCommand("ARH", setArmament, SetArmament, "ARH")
+
+	setAltitude = missionCommands.addSubMenu("Set Altitude", airMenu)
+
+			missionCommands.addCommand("1000 m", setAltitude, SetAltitude, 1000)
+			missionCommands.addCommand("5000 m", setAltitude, SetAltitude, 5000)
+			missionCommands.addCommand("9000 m", setAltitude, SetAltitude, 9000)
+			missionCommands.addCommand("Random", setAltitude, SetAltitude, "Random")
+
+	groundMenu = missionCommands.addSubMenu("Manage Ground", nil)
+
+			missionCommands.addCommand("Spawn BTR-80", groundMenu, spawnBTR80)
+			missionCommands.addCommand("Spawn T-90", groundMenu, spawnT90)
+			missionCommands.addCommand("Spawn SA-13", groundMenu, spawnSA13)
 
 end
